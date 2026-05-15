@@ -1,9 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { config as loadDotenv } from 'dotenv'
+
+// Convex writes its env vars to .env.local but Nuxt only auto-loads .env.
+loadDotenv({ path: '.env.local' })
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss'],
   css: ['~/assets/css/main.css'],
+  runtimeConfig: {
+    public: {
+      convexUrl: process.env.CONVEX_URL
+    }
+  },
   app: {
     head: {
       title: 'HVAC Grader — Free website health score',
