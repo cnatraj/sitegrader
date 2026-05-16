@@ -35,6 +35,12 @@ read additional documentation available in /docs
 - Email marketing integration (just save the email for now)
 - Multiple industries (HVAC only until validated)
 
+## Rules
+
+- Walk me through the plan before making changes
+- ask clarifying questions before jumping to conclusions
+- be crisp in your responses. Bullets over paragraphs
+
 <!-- convex-ai-start -->
 
 This project uses [Convex](https://convex.dev) as its backend.
