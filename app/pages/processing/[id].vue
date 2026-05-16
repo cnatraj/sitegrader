@@ -2,15 +2,8 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 const route = useRoute()
-const siteLabel = computed(() => {
-  const raw = route.query.url?.toString() || route.query.name?.toString()
-  if (!raw) return 'your business'
-  try {
-    return new URL(raw).hostname.replace(/^www\./, '')
-  } catch {
-    return raw
-  }
-})
+const reportId = computed(() => route.params.id)
+const siteLabel = computed(() => 'your business')
 
 // Edit this list to change what appears on the processing page.
 // Order = run order. The last item should be the final "calculate" step.

@@ -1,8 +1,12 @@
 <script setup>
 import { ref } from 'vue'
+import { api } from '../../convex/_generated/api'
 
 const query = ref('')
 const inputEl = ref(null)
+const submitting = ref(false)
+
+const createReport = useConvexMutation(api.reports.create)
 
 const suggestions = [
   { label: 'Is my site ranking on Google?', icon: 'search' },
@@ -15,9 +19,16 @@ function applySuggestion(label) {
   inputEl.value?.focus()
 }
 
-function onSubmit() {
-  if (!query.value) return
-  navigateTo({ path: '/processing', query: { url: query.value } })
+async function onSubmit() {
+  if (!query.value || submitting.value) return
+  submitting.value = true
+  try {
+    const reportId = await createReport({ url: query.value })
+    await navigateTo(`/processing/${reportId}`)
+  } catch (err) {
+    submitting.value = false
+    console.error('[index] failed to create report', err)
+  }
 }
 </script>
 
