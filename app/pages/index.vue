@@ -51,7 +51,6 @@ async function onSubmit() {
           ref="inputEl"
           v-model="query"
           type="url"
-          name="url"
           inputmode="url"
           autocomplete="url"
           autocapitalize="none"

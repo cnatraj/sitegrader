@@ -1,5 +1,6 @@
 [build]
   command = "npx convex deploy && npm run build"
+  publish = ".output/public"
 
 [build.environment]
   NODE_VERSION = "20"

@@ -7,7 +7,7 @@ loadDotenv({ path: '.env.local' })
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'nuxt-gtag', '@netlify/nuxt', '@nuxtjs/google-fonts'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', 'nuxt-gtag', '@netlify/nuxt'],
   gtag: {
     id: 'G-E7H3CRVBN6',
   },
@@ -18,7 +18,9 @@ export default defineNuxtConfig({
     },
     display: 'swap',
   },
-  css: ['~/assets/css/main.css'],
+  tailwindcss: {
+    cssPath: './app/assets/css/main.css',
+  },
   runtimeConfig: {
     public: {
       convexUrl: process.env.CONVEX_URL
