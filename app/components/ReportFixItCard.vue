@@ -1,9 +1,9 @@
 <script setup>
 defineProps({
   fixCount: { type: Number, default: 0 },
-  monthlyLoss: { type: String, default: '' }
-})
-const { pricing } = useAppConfig()
+  monthlyLoss: { type: String, default: "" },
+});
+const { pricing } = useAppConfig();
 </script>
 
 <template>
@@ -13,7 +13,8 @@ const { pricing } = useAppConfig()
       Your Fix-It Plan
     </div>
     <p class="headline">
-      A {{ fixCount }}-step plan to recover an estimated
+      Get the exact fixes, in priority order, with instructions to recover an
+      estimated
       <span class="accent">{{ monthlyLoss }}/mo</span>.
     </p>
     <div class="price-row">
@@ -23,15 +24,22 @@ const { pricing } = useAppConfig()
     <button type="button" class="btn" @click="navigateTo('/fullReport')">
       Unlock the full plan
       <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <path
+          d="M3 8h10M9 4l4 4-4 4"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
       </svg>
     </button>
+    <p class="social-proof">Hundreds of HVAC sites analyzed</p>
   </div>
 </template>
 
 <style scoped>
 .fix-card {
-  background: #1A1714;
+  background: #1a1714;
   border-radius: 16px;
   padding: 24px 26px;
   display: flex;
@@ -39,7 +47,7 @@ const { pricing } = useAppConfig()
   gap: 16px;
 }
 .eyebrow {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -58,7 +66,7 @@ const { pricing } = useAppConfig()
 .headline {
   font-size: 20px;
   font-weight: 500;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 1.35;
   margin: 0;
 }
@@ -74,11 +82,11 @@ const { pricing } = useAppConfig()
   font-size: 40px;
   font-weight: 500;
   letter-spacing: -0.03em;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 1;
 }
 .price-note {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.4);
   letter-spacing: 0.06em;
@@ -87,7 +95,7 @@ const { pricing } = useAppConfig()
   appearance: none;
   border: 0;
   background: var(--accent);
-  color: #FFFFFF;
+  color: #ffffff;
   font: inherit;
   font-size: 15px;
   font-weight: 500;
@@ -108,5 +116,14 @@ const { pricing } = useAppConfig()
 }
 .btn:hover {
   background: var(--accent-hover);
+}
+.social-proof {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  margin: 0;
 }
 </style>

@@ -6,6 +6,10 @@ defineProps({
 
 <template>
   <header class="page-header">
+    <NuxtLink class="wordmark" to="/" aria-label="HVAC Grader home">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="name">HVAC Grader</span>
+    </NuxtLink>
     <div class="stamp">
       <span>Report</span>
       <span class="dot">•</span>
@@ -22,7 +26,39 @@ defineProps({
   min-height: 68px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink);
+  user-select: none;
+}
+.mark {
+  width: 22px;
+  height: 22px;
+  position: relative;
+  display: inline-block;
+}
+.mark::before,
+.mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.75px solid var(--ink);
+}
+.mark::after {
+  transform: scale(0.42);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.name {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
 }
 .stamp {
   font-family: 'JetBrains Mono', ui-monospace, monospace;

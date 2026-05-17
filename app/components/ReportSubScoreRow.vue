@@ -12,7 +12,7 @@ function ringOffset(score, total) {
 
 <template>
   <div class="subscores">
-    <div v-for="s in subScores" :key="s.label" class="card subscore-card">
+    <div v-for="s in subScores" :key="s.label" :class="['card', 'subscore-card', `tone-${s.tone}`]">
       <span :class="['mini-ring', `mini-ring-${s.tone}`]" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
           <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.18" stroke-width="3" />
@@ -88,6 +88,8 @@ function ringOffset(score, total) {
   color: var(--ink-mute);
   font-weight: 400;
 }
+.subscore-card.tone-red .subscore-score { color: var(--accent); }
+.subscore-card.tone-red { background: #FEF3EE; }
 
 @media (max-width: 1100px) {
   .subscores {

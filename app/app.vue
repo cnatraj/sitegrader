@@ -1,51 +1,10 @@
 <template>
   <div>
-    <NuxtLink class="wordmark" to="/" aria-label="HVAC Grader home">
-      <span class="mark" aria-hidden="true"></span>
-      <span class="name">HVAC Grader</span>
-    </NuxtLink>
-
     <NuxtPage />
   </div>
 </template>
 
 <style>
-.wordmark {
-  position: fixed;
-  top: 28px;
-  left: 32px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: #1A1714;
-  user-select: none;
-  z-index: 10;
-}
-.wordmark .mark {
-  width: 22px;
-  height: 22px;
-  position: relative;
-  display: inline-block;
-}
-.wordmark .mark::before,
-.wordmark .mark::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 1.75px solid #1A1714;
-}
-.wordmark .mark::after {
-  transform: scale(0.42);
-  background: #C2410C;
-  border-color: #C2410C;
-}
-.wordmark .name {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-}
 
 .stage {
   min-height: 100vh;
@@ -193,11 +152,7 @@
   .stage {
     padding: 110px 18px 40px;
   }
-  .wordmark {
-    top: 20px;
-    left: 20px;
-  }
-  .headline {
+.headline {
     font-size: 32px;
   }
   .search input {

@@ -9,6 +9,7 @@ Voice rules — apply to every word you write in the output:
 - Never use acronyms (not LCP, CLS, NAP, CTA, GBP, or any others)
 - One sentence per explanation. Two sentences max for the summary.
 - Use "your site", "you're missing", "right now" — keep it personal and direct
+- No mention of points in the explanations.
 
 
 SCORING RUBRIC

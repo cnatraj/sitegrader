@@ -5,6 +5,8 @@ defineProps({
 </script>
 
 <template>
+  <div>
+  <h1 class="report-title">Your Website could be Costing You Leads</h1>
   <div class="wrapper">
     <div class="site-pill">
       <span class="icon" aria-hidden="true">
@@ -26,9 +28,18 @@ defineProps({
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <style scoped>
+.report-title {
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  line-height: 1.1;
+  margin: 0 0 20px;
+}
 .wrapper {
   display: flex;
   flex-direction: row;
