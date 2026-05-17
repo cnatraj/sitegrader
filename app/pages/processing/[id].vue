@@ -23,11 +23,25 @@ watch(error, (val) => {
   if (val) console.error('[processing] subscription error:', val)
 })
 
+const STATUS_MAP = {
+  queued:    { floor: 0, ceiling: 0 },
+  scraping:  { floor: 1, ceiling: 2 },
+  scraped:   { floor: 3, ceiling: 6 },
+  analyzing: { floor: 7, ceiling: 8 },
+  done:      { floor: 9, ceiling: 9 },
+  error:     { floor: 0, ceiling: 0 },
+}
+
 watch(report, (val) => {
   if (!val) return
   console.log('[processing] report update:', { status: val.status, error: val.error, hasAnalysis: !!val.analysis, hasScrape: !!val.scrapeData, hasPageSpeed: !!val.pageSpeedData })
   if (val.status === 'done') {
     router.push(`/report/${reportId.value}`)
+    return
+  }
+  const floor = STATUS_MAP[val.status]?.floor ?? 0
+  if (currentIndex.value < floor) {
+    currentIndex.value = floor
   }
 })
 
@@ -57,11 +71,10 @@ function stepStatus(i) {
 
 onMounted(() => {
   timer = setInterval(() => {
-    if (currentIndex.value < checks.length) {
+    const status = report.value?.status ?? 'queued'
+    const ceiling = STATUS_MAP[status]?.ceiling ?? 0
+    if (currentIndex.value < ceiling) {
       currentIndex.value += 1
-    } else {
-      clearInterval(timer)
-      timer = null
     }
   }, stepMs)
 })
