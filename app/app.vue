@@ -12,6 +12,7 @@
   display: grid;
   place-items: center;
   padding: 96px 24px 80px;
+  position: relative;
 }
 
 .panel {

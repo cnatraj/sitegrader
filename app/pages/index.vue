@@ -37,6 +37,11 @@ async function onSubmit() {
 
 <template>
   <main class="stage">
+    <NuxtLink class="wordmark" to="/" aria-label="HVAC Grader home">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="name">HVAC Grader</span>
+    </NuxtLink>
+
     <div class="panel" data-screen-label="01 Landing">
       <h1 class="headline">Enter your website URL to see your online health score</h1>
       <p class="sub">Find out if your website is winning or losing customers — free, in seconds.</p>
@@ -102,3 +107,41 @@ async function onSubmit() {
     </div>
   </main>
 </template>
+
+<style scoped>
+.wordmark {
+  position: absolute;
+  top: 28px;
+  left: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink);
+  user-select: none;
+}
+.mark {
+  width: 22px;
+  height: 22px;
+  position: relative;
+  display: inline-block;
+}
+.mark::before,
+.mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.75px solid var(--ink);
+}
+.mark::after {
+  transform: scale(0.42);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.name {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+</style>
