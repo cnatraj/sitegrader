@@ -200,7 +200,7 @@ const reportDate = computed(() =>
       <button
         type="button"
         class="sticky-btn"
-        @click="navigateTo('/fullReport')"
+        @click="navigateTo({ path: '/fullReport', query: { r: route.params.id } })"
       >
         {{ pricing.fullReport }} →
       </button>

@@ -1,11 +1,20 @@
 <script setup>
+import { api } from '../../convex/_generated/api'
+
 const { pricing } = useAppConfig();
 const router = useRouter();
+const route = useRoute();
 const email = ref("");
 const submitted = ref(false);
 
-function submit() {
+const captureLead = useConvexMutation(api.leads.capture)
+
+async function submit() {
   if (!email.value) return;
+  await captureLead({
+    email: email.value,
+    reportId: route.query.r || undefined,
+  });
   submitted.value = true;
 }
 </script>
@@ -189,8 +198,9 @@ function submit() {
 .main {
   flex: 1;
   display: flex;
-  align-items: flex-start;
-  padding: 80px 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
 }
 .content {
   width: 100%;
@@ -356,6 +366,8 @@ function submit() {
     padding: 18px 20px;
   }
   .main {
+    align-items: flex-start;
+    justify-content: flex-start;
     padding: 48px 20px;
   }
   .input-row {

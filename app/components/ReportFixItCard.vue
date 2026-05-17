@@ -4,6 +4,10 @@ defineProps({
   monthlyLoss: { type: String, default: "" },
 });
 const { pricing } = useAppConfig();
+const route = useRoute()
+function goToFullReport() {
+  navigateTo({ path: '/fullReport', query: { r: route.params.id } })
+}
 </script>
 
 <template>
@@ -21,7 +25,7 @@ const { pricing } = useAppConfig();
       <span class="price">{{ pricing.fullReport }}</span>
       <span class="price-note">one-time</span>
     </div>
-    <button type="button" class="btn" @click="navigateTo('/fullReport')">
+    <button type="button" class="btn" @click="goToFullReport">
       Unlock the full plan
       <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path

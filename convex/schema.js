@@ -36,5 +36,11 @@ export default defineSchema({
     // Timestamps. Convex auto-adds _creationTime; we keep our own for portability.
     createdAt: v.number(),
     completedAt: v.optional(v.number())
-  })
+  }),
+
+  leads: defineTable({
+    email: v.string(),
+    reportId: v.optional(v.id('reports')),
+    createdAt: v.number(),
+  }),
 })

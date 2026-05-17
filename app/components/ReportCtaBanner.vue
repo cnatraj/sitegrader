@@ -4,6 +4,10 @@ defineProps({
   date: { type: String, default: "" },
 });
 const { pricing } = useAppConfig()
+const route = useRoute()
+function goToFullReport() {
+  navigateTo({ path: '/fullReport', query: { r: route.params.id } })
+}
 </script>
 
 <template>
@@ -33,7 +37,7 @@ const { pricing } = useAppConfig()
         No subscription. No upsells. Pay once, keep the report
         <span class="accent">forever</span>.
       </p>
-      <button type="button" class="cta-btn" @click="navigateTo('/fullReport')">
+      <button type="button" class="cta-btn" @click="goToFullReport">
         Get the full report
         <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path
