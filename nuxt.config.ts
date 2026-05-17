@@ -8,6 +8,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', 'nuxt-gtag'],
+  nitro: {
+    preset: 'netlify',
+  },
   gtag: {
     id: 'G-E7H3CRVBN6',
   },
