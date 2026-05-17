@@ -1,9 +1,28 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { api } from '../../../convex/_generated/api'
 
 const route = useRoute()
 const reportId = computed(() => route.params.id)
 const siteLabel = computed(() => 'your business')
+
+const { data: report, pending, error } = useConvexQuery(api.reports.byId, () => ({ id: reportId.value }))
+
+watch(pending, (val) => {
+  console.log('[processing] pending:', val)
+})
+
+watch(error, (val) => {
+  if (val) console.error('[processing] subscription error:', val)
+})
+
+watch(report, (val) => {
+  if (!val) return
+  console.log('[processing] report update:', { status: val.status, error: val.error, hasAnalysis: !!val.analysis, hasScrape: !!val.scrapeData, hasPageSpeed: !!val.pageSpeedData })
+  if (val.status === 'done') {
+    navigateTo(`/report/${reportId.value}`)
+  }
+})
 
 // Edit this list to change what appears on the processing page.
 // Order = run order. The last item should be the final "calculate" step.
@@ -82,7 +101,7 @@ onBeforeUnmount(() => {
         v-if="allDone"
         type="button"
         class="view-report"
-        @click="navigateTo('/report')"
+        @click="navigateTo(`/report/${reportId}`)"
       >
         View report
       </button>

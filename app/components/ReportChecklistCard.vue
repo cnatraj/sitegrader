@@ -1,8 +1,8 @@
 <script setup>
 defineProps({
   intro: { type: Object, default: null }, // { title, text }
-  groups: { type: Array, required: true } // [{ title, items: [{ label, description, sub, passed }] }]
-})
+  groups: { type: Array, required: true }, // [{ title, items: [{ label, description, sub, passed }] }]
+});
 </script>
 
 <template>
@@ -22,20 +22,34 @@ defineProps({
         type="button"
         class="item"
       >
-        <span :class="['indicator', item.passed ? 'pass' : 'fail']" aria-hidden="true">
+        <span
+          :class="['indicator', item.passed ? 'pass' : 'fail']"
+          aria-hidden="true"
+        >
           <svg v-if="item.passed" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8.5 L6.5 12 L13 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M3 8.5 L6.5 12 L13 4.5"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
           <svg v-else viewBox="0 0 16 16" fill="none">
-            <path d="M4 4 L12 12 M12 4 L4 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path
+              d="M4 4 L12 12 M12 4 L4 12"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
           </svg>
         </span>
         <div class="text">
           <div class="label">{{ item.label }}</div>
-          <div v-if="item.description" class="description">{{ item.description }}</div>
-          <div v-if="item.sub" class="sub">{{ item.sub }}</div>
+          <div v-if="item.description" class="description">
+            {{ item.description }}
+          </div>
         </div>
-        <span class="chev" aria-hidden="true">›</span>
       </button>
     </div>
   </div>
@@ -43,7 +57,7 @@ defineProps({
 
 <style scoped>
 .card {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid var(--hairline);
   border-radius: 14px;
   padding: 26px 28px;
@@ -52,7 +66,7 @@ defineProps({
   padding-bottom: 18px;
 }
 .intro-label {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -70,7 +84,7 @@ defineProps({
   margin-top: 22px;
 }
 .group-title {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -96,7 +110,7 @@ defineProps({
   transition: background 0.15s ease;
 }
 .item:hover {
-  background: #FFFCF6;
+  background: #fffcf6;
 }
 .indicator {
   width: 18px;

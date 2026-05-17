@@ -1,110 +1,241 @@
 <script setup>
 defineProps({
-  fixCount: { type: Number, default: 0 },
-  highlightLabel: { type: String, default: 'AI Site Builder' },
-  buttonLabel: { type: String, default: 'Rebuild my website' }
-})
+  businessName: { type: String, default: "" },
+  date: { type: String, default: "" },
+});
 </script>
 
 <template>
-  <div class="cta">
-    <div class="cta-text">
-      <div class="cta-eyebrow">
-        <span>HVAC Grader</span>
-        <span class="dot">·</span>
-        <span class="pro">Pro</span>
+  <div class="banner">
+    <div class="panel-left">
+      <div class="eyebrow">
+        Order Summary
+        <span class="sep">—</span>
       </div>
-      <p class="cta-headline">
-        Fix all <span class="accent">{{ fixCount }} issues</span> with
-        <span class="accent">{{ highlightLabel }}</span>
-        — in 35 seconds.
+      <h2 class="headline">Your full fix-it plan, itemized.</h2>
+      <p class="body-text">
+        The free report tells you what's broken. The full report tells you
+        exactly what to do.
+      </p>
+      <div class="h-divider" aria-hidden="true"></div>
+      <div class="price-row">
+        <span class="price-label">Total · One-Time</span>
+        <span class="price">$19.99</span>
+      </div>
+    </div>
+
+    <div class="v-divider" aria-hidden="true"></div>
+
+    <div class="panel-right">
+      <div class="badge">One-Time</div>
+      <p class="trust-text">
+        No subscription. No upsells. Pay once, keep the report
+        <span class="accent">forever</span>.
+      </p>
+      <button type="button" class="cta-btn" @click="navigateTo('/fullReport')">
+        Get the full report
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path
+            d="M3 8h10M9 4l4 4-4 4"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <p class="guarantee">
+        <span class="green-dot" aria-hidden="true">●</span>
+        100% Money Back Guaranteed.
       </p>
     </div>
-    <button type="button" class="cta-button">
-      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-        <path d="M8 1.6 L9.85 5.6 L14.2 6.15 L11 9.05 L11.85 13.3 L8 11.15 L4.15 13.3 L5 9.05 L1.8 6.15 L6.15 5.6 Z" />
-      </svg>
-      {{ buttonLabel }}
-    </button>
   </div>
 </template>
 
 <style scoped>
-.cta {
-  background: #1A1714;
+.banner {
+  display: grid;
+  grid-template-columns: 1fr 1px 360px;
+  background: var(--cream);
   border-radius: 18px;
+  margin: 56px 0 80px;
+  overflow: hidden;
+}
+
+.panel-left {
   padding: 36px 40px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  margin: 56px 0 80px;
+  flex-direction: column;
+  gap: 16px;
 }
-.cta-eyebrow {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+.panel-right {
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.eyebrow {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  display: inline-flex;
+  color: var(--ink-mute);
+  display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 14px;
+  gap: 6px;
+  flex-wrap: wrap;
 }
-.cta-eyebrow .dot {
-  color: var(--accent);
+.sep {
+  color: var(--ink-mute);
 }
-.cta-eyebrow .pro {
-  color: rgba(255, 255, 255, 0.85);
-}
-.cta-headline {
+
+.headline {
   font-size: 28px;
   font-weight: 500;
   letter-spacing: -0.02em;
+  color: var(--ink);
   line-height: 1.15;
-  color: #FFFFFF;
   margin: 0;
-  max-width: 600px;
-  text-wrap: balance;
 }
-.cta-headline .accent {
+.body-text {
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 480px;
+}
+
+.h-divider {
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    #d0c9bf 0px,
+    #d0c9bf 5px,
+    transparent 5px,
+    transparent 11px
+  );
+  margin-top: auto;
+}
+.price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.price-label {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.price {
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.v-divider {
+  background: repeating-linear-gradient(
+    to bottom,
+    #d0c9bf 0px,
+    #d0c9bf 5px,
+    transparent 5px,
+    transparent 11px
+  );
+  margin: 24px 0;
+}
+
+.badge {
+  display: inline-flex;
+  align-self: flex-start;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+.trust-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.45;
+  margin: 0;
+}
+.accent {
   color: var(--accent);
 }
-.cta-button {
+
+.cta-btn {
   appearance: none;
   border: 0;
   background: var(--accent);
-  color: #FFFFFF;
+  color: #ffffff;
   font: inherit;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
-  padding: 14px 24px;
+  padding: 16px 24px;
   border-radius: 999px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease;
-  white-space: nowrap;
+  width: 100%;
+  transition: background 0.15s ease;
+  margin-top: auto;
 }
-.cta-button svg {
-  width: 14px;
-  height: 14px;
+.cta-btn svg {
+  width: 16px;
+  height: 16px;
 }
-.cta-button:hover {
+.cta-btn:hover {
   background: var(--accent-hover);
 }
-.cta-button:active {
-  transform: scale(0.98);
+
+.guarantee {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+}
+.green-dot {
+  color: #4a8a5e;
+  font-size: 8px;
 }
 
 @media (max-width: 900px) {
-  .cta {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 28px 24px;
+  .banner {
+    grid-template-columns: 1fr;
   }
-  .cta-headline {
+  .v-divider {
+    height: 1px;
+    width: auto;
+    background: repeating-linear-gradient(
+      to right,
+      #d0c9bf 0px,
+      #d0c9bf 5px,
+      transparent 5px,
+      transparent 11px
+    );
+    margin: 0 40px;
+  }
+  .panel-left,
+  .panel-right {
+    padding: 28px 28px;
+  }
+  .headline {
     font-size: 24px;
   }
 }

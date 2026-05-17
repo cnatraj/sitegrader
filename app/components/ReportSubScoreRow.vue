@@ -41,7 +41,7 @@ function ringOffset(score, total) {
 <style scoped>
 .subscores {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 .card {
@@ -65,15 +65,10 @@ function ringOffset(score, total) {
   width: 100%;
   height: 100%;
 }
-.mini-ring-red {
-  color: var(--accent);
-}
-.mini-ring-amber {
-  color: var(--status-amber);
-}
-.mini-ring-green {
-  color: var(--status-green);
-}
+.mini-ring-red { color: var(--accent); }
+.mini-ring-amber { color: var(--status-amber); }
+.mini-ring-green { color: var(--status-green); }
+
 .subscore-label {
   font-size: 16px;
   font-weight: 500;
@@ -95,6 +90,11 @@ function ringOffset(score, total) {
 }
 
 @media (max-width: 1100px) {
+  .subscores {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 640px) {
   .subscores {
     grid-template-columns: 1fr;
   }

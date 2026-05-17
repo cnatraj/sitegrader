@@ -6,6 +6,7 @@ import {
 } from "./_generated/server";
 import { v } from "convex/values";
 import { api, internal } from "./_generated/api";
+import { analysisPrompt } from "./prompt";
 
 // Public: called from the landing page.
 export const create = mutation({
@@ -52,6 +53,10 @@ export const setScrape = internalMutation({
   args: { id: v.id("reports"), scrapeData: v.any() },
   handler: async (ctx, { id, scrapeData }) => {
     await ctx.db.patch(id, { scrapeData, status: "scraped" });
+    const report = await ctx.db.get(id);
+    if (report?.pageSpeedData) {
+      await ctx.scheduler.runAfter(0, internal.reports.runAnalysis, { id });
+    }
   },
 });
 
@@ -70,6 +75,73 @@ export const setPageSpeed = internalMutation({
   args: { id: v.id('reports'), pageSpeedData: pageSpeedDataValidator },
   handler: async (ctx, { id, pageSpeedData }) => {
     await ctx.db.patch(id, { pageSpeedData })
+    const report = await ctx.db.get(id);
+    if (report?.scrapeData) {
+      await ctx.scheduler.runAfter(0, internal.reports.runAnalysis, { id });
+    }
+  }
+})
+
+export const setAnalysis = internalMutation({
+  args: { id: v.id('reports'), analysis: v.any() },
+  handler: async (ctx, { id, analysis }) => {
+    await ctx.db.patch(id, { analysis, status: 'done', completedAt: Date.now() })
+  }
+})
+
+export const runAnalysis = internalAction({
+  args: { id: v.id('reports') },
+  handler: async (ctx, { id }) => {
+    try {
+      const report = await ctx.runQuery(api.reports.byId, { id })
+      if (!report) throw new Error('report missing')
+
+      const apiKey = process.env.ANTHROPIC_API_KEY
+      if (!apiKey) throw new Error('ANTHROPIC_API_KEY not set on Convex deployment')
+
+      await ctx.runMutation(internal.reports.setStatus, { id, status: 'analyzing' })
+
+      const { mobile } = report.pageSpeedData
+      const userMessage = `URL: ${report.url}
+
+## Mobile Performance (PageSpeed)
+Score: ${mobile.score} / 100
+LCP: ${Math.round(mobile.lcp)} ms
+CLS: ${mobile.cls.toFixed(3)}
+
+## Website HTML
+${report.scrapeData.html}`
+
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 4096,
+          system: analysisPrompt,
+          messages: [{ role: 'user', content: userMessage }]
+        })
+      })
+
+      if (!res.ok) throw new Error(`Anthropic returned ${res.status}`)
+
+      const body = await res.json()
+      const text = body.content?.[0]?.text ?? ''
+      console.log('[runAnalysis] raw claude response (first 500 chars):', text.slice(0, 500))
+      const jsonMatch = text.match(/\{[\s\S]*\}/)
+      if (!jsonMatch) throw new Error('No JSON found in Claude response')
+      console.log('[runAnalysis] extracted json (first 200 chars):', jsonMatch[0].slice(0, 200))
+      const analysis = JSON.parse(jsonMatch[0])
+      console.log('[runAnalysis] parsed ok, overall_score:', analysis.overall_score)
+
+      await ctx.runMutation(internal.reports.setAnalysis, { id, analysis })
+    } catch (e) {
+      await ctx.runMutation(internal.reports.fail, { id, error: String(e?.message ?? e) })
+    }
   }
 })
 
