@@ -5,6 +5,13 @@ import { api } from '../../../convex/_generated/api'
 import { useConvexQuery } from '../../composables/useConvex.js'
 import { useGtag } from '../../composables/useGtag.js'
 import { useAppConfig } from '../../composables/useAppConfig.js'
+import ReportHeader from '../../components/ReportHeader.vue'
+import ReportSiteIdentity from '../../components/ReportSiteIdentity.vue'
+import ReportScoreHero from '../../components/ReportScoreHero.vue'
+import ReportSubScoreRow from '../../components/ReportSubScoreRow.vue'
+import ReportSection from '../../components/ReportSection.vue'
+import ReportChecklistCard from '../../components/ReportChecklistCard.vue'
+import ReportCtaBanner from '../../components/ReportCtaBanner.vue'
 
 const { gtag } = useGtag()
 gtag('event', 'page_view', { page_title: 'Report' })
