@@ -1,6 +1,9 @@
 <script setup>
 import { api } from '../../convex/_generated/api'
 
+const { gtag } = useGtag()
+gtag('event', 'page_view', { page_title: 'Full Report' })
+
 const { pricing } = useAppConfig();
 const router = useRouter();
 const route = useRoute();

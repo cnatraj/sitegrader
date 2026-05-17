@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import { api } from '../../convex/_generated/api'
 
+const { gtag } = useGtag()
+gtag('event', 'page_view', { page_title: 'Home' })
+
 const query = ref('')
 const inputEl = ref(null)
 const submitting = ref(false)

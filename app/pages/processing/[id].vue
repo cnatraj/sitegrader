@@ -2,6 +2,9 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import { api } from '../../../convex/_generated/api'
 
+const { gtag } = useGtag()
+gtag('event', 'page_view', { page_title: 'Processing' })
+
 const route = useRoute()
 const reportId = computed(() => route.params.id)
 const siteLabel = computed(() => 'your business')

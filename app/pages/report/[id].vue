@@ -2,6 +2,9 @@
 import { computed } from "vue";
 import { api } from "../../../convex/_generated/api";
 
+const { gtag } = useGtag()
+gtag('event', 'page_view', { page_title: 'Report' })
+
 const { pricing } = useAppConfig()
 
 const route = useRoute();
