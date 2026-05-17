@@ -151,6 +151,16 @@ const reportDate = computed(() =>
     year: "numeric",
   }),
 );
+
+function handleStickyClick() {
+  gtag('event', 'cta_click', {
+    button_location: 'sticky_bar',
+    report_price: pricing.fullReport,
+    report_id: route.params.id,
+    total_score: score.value.value,
+  })
+  navigateTo({ path: '/fullReport', query: { r: route.params.id } })
+}
 </script>
 
 <template>
@@ -194,6 +204,7 @@ const reportDate = computed(() =>
         <ReportCtaBanner
           :business-name="business.name"
           :date="reportDate"
+          :total-score="score.value"
         />
       </div>
     </main>
@@ -203,7 +214,7 @@ const reportDate = computed(() =>
       <button
         type="button"
         class="sticky-btn"
-        @click="navigateTo({ path: '/fullReport', query: { r: route.params.id } })"
+        @click="handleStickyClick"
       >
         {{ pricing.fullReport }} →
       </button>

@@ -1,11 +1,19 @@
 <script setup>
-defineProps({
+const props = defineProps({
   businessName: { type: String, default: "" },
   date: { type: String, default: "" },
+  totalScore: { type: Number, default: 0 },
 });
 const { pricing } = useAppConfig()
+const { gtag } = useGtag()
 const route = useRoute()
 function goToFullReport() {
+  gtag('event', 'cta_click', {
+    button_location: 'cta_banner',
+    report_price: pricing.fullReport,
+    report_id: route.params.id,
+    total_score: props.totalScore,
+  })
   navigateTo({ path: '/fullReport', query: { r: route.params.id } })
 }
 </script>
