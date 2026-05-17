@@ -7,7 +7,8 @@ loadDotenv({ path: '.env.local' })
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', 'nuxt-gtag', '@netlify/nuxt'],
+  ssr: false,
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', 'nuxt-gtag'],
   gtag: {
     id: 'G-E7H3CRVBN6',
   },
