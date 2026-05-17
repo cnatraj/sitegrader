@@ -1,8 +1,8 @@
 import { ref, shallowRef, watch, onScopeDispose, toValue } from 'vue'
+import { convexClient } from '../convex.js'
 
 function getClient() {
-  const { $convex } = useNuxtApp()
-  return $convex || null
+  return convexClient
 }
 
 /**
@@ -15,12 +15,6 @@ export function useConvexQuery(queryRef, argsGetter = () => ({})) {
   const data = shallowRef(undefined)
   const error = ref(null)
   const pending = ref(true)
-
-  // Plugin is client-only; on the server we skip all work and keep `pending`
-  // true so the SSR'd markup shows "connecting…" until the client subscribes.
-  if (import.meta.server) {
-    return { data, error, pending }
-  }
 
   const client = getClient()
   if (!client) {

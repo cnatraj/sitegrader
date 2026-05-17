@@ -1,5 +1,7 @@
 <script setup>
+import { computed } from 'vue'
 import { api } from '../../convex/_generated/api'
+import { useConvexQuery } from '../composables/useConvex.js'
 
 const { data, error, pending } = useConvexQuery(api.ping.get)
 

@@ -1,11 +1,15 @@
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { api } from '../../../convex/_generated/api'
+import { useConvexQuery } from '../../composables/useConvex.js'
+import { useGtag } from '../../composables/useGtag.js'
 
 const { gtag } = useGtag()
 gtag('event', 'page_view', { page_title: 'Processing' })
 
 const route = useRoute()
+const router = useRouter()
 const reportId = computed(() => route.params.id)
 const siteLabel = computed(() => 'your business')
 
@@ -23,12 +27,10 @@ watch(report, (val) => {
   if (!val) return
   console.log('[processing] report update:', { status: val.status, error: val.error, hasAnalysis: !!val.analysis, hasScrape: !!val.scrapeData, hasPageSpeed: !!val.pageSpeedData })
   if (val.status === 'done') {
-    navigateTo(`/report/${reportId.value}`)
+    router.push(`/report/${reportId.value}`)
   }
 })
 
-// Edit this list to change what appears on the processing page.
-// Order = run order. The last item should be the final "calculate" step.
 const checks = [
   { label: 'Finding your website', emoji: '🔍' },
   { label: 'Reading your website content', emoji: '📄' },
@@ -104,7 +106,7 @@ onBeforeUnmount(() => {
         v-if="allDone"
         type="button"
         class="view-report"
-        @click="navigateTo(`/report/${reportId}`)"
+        @click="router.push(`/report/${reportId}`)"
       >
         View report
       </button>

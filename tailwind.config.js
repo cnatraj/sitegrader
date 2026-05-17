@@ -1,11 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
+    './index.html',
     './app/**/*.{vue,js,ts}',
-    './components/**/*.{vue,js,ts}',
-    './pages/**/*.{vue,js,ts}',
-    './layouts/**/*.{vue,js,ts}',
-    './nuxt.config.{js,ts}'
   ],
   theme: {
     extend: {

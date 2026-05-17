@@ -1,34 +1,39 @@
 <script setup>
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { api } from '../../convex/_generated/api'
+import { useConvexMutation } from '../composables/useConvex.js'
+import { useGtag } from '../composables/useGtag.js'
+import { useAppConfig } from '../composables/useAppConfig.js'
 
 const { gtag } = useGtag()
 gtag('event', 'page_view', { page_title: 'Full Report' })
 
-const { pricing } = useAppConfig();
-const router = useRouter();
-const route = useRoute();
-const email = ref("");
-const submitted = ref(false);
+const { pricing } = useAppConfig()
+const router = useRouter()
+const route = useRoute()
+const email = ref('')
+const submitted = ref(false)
 
 const captureLead = useConvexMutation(api.leads.capture)
 
 async function submit() {
-  if (!email.value) return;
+  if (!email.value) return
   await captureLead({
     email: email.value,
     reportId: route.query.r || undefined,
-  });
-  submitted.value = true;
+  })
+  submitted.value = true
 }
 </script>
 
 <template>
   <div class="page">
     <header class="page-header">
-      <NuxtLink class="wordmark" to="/" aria-label="HVAC Grader home">
+      <RouterLink class="wordmark" to="/" aria-label="HVAC Grader home">
         <span class="mark" aria-hidden="true"></span>
         <span class="name">HVAC Grader</span>
-      </NuxtLink>
+      </RouterLink>
       <button class="back-btn" @click="router.back()">
         <svg
           viewBox="0 0 16 16"
@@ -156,7 +161,7 @@ async function submit() {
 }
 .mark::before,
 .mark::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   border-radius: 50%;
@@ -177,7 +182,7 @@ async function submit() {
   border: 0;
   background: transparent;
   font: inherit;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -221,7 +226,7 @@ async function submit() {
   border: 1.5px solid var(--hairline-strong);
   border-radius: 999px;
   padding: 6px 16px 6px 10px;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -290,9 +295,7 @@ async function submit() {
   border: 1.5px solid var(--hairline);
   border-radius: 999px;
   padding: 0 20px;
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 .input-wrap:focus-within {
   border-color: var(--accent);
@@ -339,7 +342,7 @@ async function submit() {
 
 /* Footer text */
 .no-spam {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;

@@ -1,12 +1,19 @@
 <script setup>
+import { useRoute, useRouter } from 'vue-router'
+import { useGtag } from '../composables/useGtag.js'
+import { useAppConfig } from '../composables/useAppConfig.js'
+
 const props = defineProps({
-  businessName: { type: String, default: "" },
-  date: { type: String, default: "" },
+  businessName: { type: String, default: '' },
+  date: { type: String, default: '' },
   totalScore: { type: Number, default: 0 },
-});
+})
+
 const { pricing } = useAppConfig()
 const { gtag } = useGtag()
 const route = useRoute()
+const router = useRouter()
+
 function goToFullReport() {
   gtag('event', 'cta_click', {
     button_location: 'cta_banner',
@@ -14,7 +21,7 @@ function goToFullReport() {
     report_id: route.params.id,
     total_score: props.totalScore,
   })
-  navigateTo({ path: '/fullReport', query: { r: route.params.id } })
+  router.push({ path: '/fullReport', query: { r: route.params.id } })
 }
 </script>
 
@@ -89,7 +96,7 @@ function goToFullReport() {
 }
 
 .eyebrow {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -136,7 +143,7 @@ function goToFullReport() {
   justify-content: space-between;
 }
 .price-label {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -166,7 +173,7 @@ function goToFullReport() {
   align-self: flex-start;
   border: 1.5px solid var(--accent);
   color: var(--accent);
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -212,7 +219,7 @@ function goToFullReport() {
 }
 
 .guarantee {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;

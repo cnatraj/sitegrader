@@ -1,10 +1,14 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { api } from '../../convex/_generated/api'
+import { useConvexMutation } from '../composables/useConvex.js'
+import { useGtag } from '../composables/useGtag.js'
 
 const { gtag } = useGtag()
 gtag('event', 'page_view', { page_title: 'Home' })
 
+const router = useRouter()
 const query = ref('')
 const inputEl = ref(null)
 const submitting = ref(false)
@@ -27,7 +31,7 @@ async function onSubmit() {
   submitting.value = true
   try {
     const reportId = await createReport({ url: query.value })
-    await navigateTo(`/processing/${reportId}`)
+    await router.push(`/processing/${reportId}`)
   } catch (err) {
     submitting.value = false
     console.error('[index] failed to create report', err)
@@ -37,10 +41,10 @@ async function onSubmit() {
 
 <template>
   <main class="stage">
-    <NuxtLink class="wordmark" to="/" aria-label="HVAC Grader home">
+    <RouterLink class="wordmark" to="/" aria-label="HVAC Grader home">
       <span class="mark" aria-hidden="true"></span>
       <span class="name">HVAC Grader</span>
-    </NuxtLink>
+    </RouterLink>
 
     <div class="panel" data-screen-label="01 Landing">
       <h1 class="headline">Enter your website URL to see your online health score</h1>
