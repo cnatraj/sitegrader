@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from "vue";
+import ReportFixItCard from './ReportFixItCard.vue'
 
 const props = defineProps({
   score: { type: Object, required: true },
@@ -84,7 +85,10 @@ const donutOffset = computed(
         </div>
         <div v-if="m.caption" class="metric-caption">{{ m.caption }}</div>
       </div>
-      <ReportFixItCard :fix-count="fixCount" :monthly-loss="score.monthlyLoss" />
+      <ReportFixItCard
+        :fix-count="fixCount"
+        :monthly-loss="score.monthlyLoss"
+      />
     </div>
   </div>
 </template>

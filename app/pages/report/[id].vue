@@ -1,71 +1,101 @@
 <script setup>
-import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { api } from '../../../convex/_generated/api'
-import { useConvexQuery } from '../../composables/useConvex.js'
-import { useGtag } from '../../composables/useGtag.js'
-import { useAppConfig } from '../../composables/useAppConfig.js'
-import ReportHeader from '../../components/ReportHeader.vue'
-import ReportSiteIdentity from '../../components/ReportSiteIdentity.vue'
-import ReportScoreHero from '../../components/ReportScoreHero.vue'
-import ReportSubScoreRow from '../../components/ReportSubScoreRow.vue'
-import ReportSection from '../../components/ReportSection.vue'
-import ReportChecklistCard from '../../components/ReportChecklistCard.vue'
-import ReportCtaBanner from '../../components/ReportCtaBanner.vue'
+import { computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { api } from "../../../convex/_generated/api";
+import { useConvexQuery } from "../../composables/useConvex.js";
+import { useGtag } from "../../composables/useGtag.js";
+import { useAppConfig } from "../../composables/useAppConfig.js";
+import ReportHeader from "../../components/ReportHeader.vue";
+import ReportSiteIdentity from "../../components/ReportSiteIdentity.vue";
+import ReportScoreHero from "../../components/ReportScoreHero.vue";
+import ReportSubScoreRow from "../../components/ReportSubScoreRow.vue";
+import ReportSection from "../../components/ReportSection.vue";
+import ReportChecklistCard from "../../components/ReportChecklistCard.vue";
+import ReportCtaBanner from "../../components/ReportCtaBanner.vue";
 
-const { gtag } = useGtag()
-gtag('event', 'page_view', { page_title: 'Report' })
+const { gtag } = useGtag();
+gtag("event", "page_view", { page_title: "Report" });
 
-const { pricing } = useAppConfig()
+const { pricing } = useAppConfig();
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 const { data: report, pending } = useConvexQuery(api.reports.byId, () => ({
   id: route.params.id,
-}))
+}));
 
-const analysis = computed(() => report.value?.analysis ?? null)
+const analysis = computed(() => report.value?.analysis ?? null);
 
 const business = computed(() => ({
-  name: analysis.value?.business_name ?? report.value?.url ?? '—',
-  url: report.value?.url ?? '',
-}))
+  name: analysis.value?.business_name ?? report.value?.url ?? "—",
+  url: report.value?.url ?? "",
+}));
 
 const score = computed(() => ({
   value: analysis.value?.overall_score ?? 0,
   outOf: 100,
-  verdict: analysis.value?.grade_label ?? '—',
-  caption: analysis.value?.ai_visibility_summary ?? '',
+  verdict: analysis.value?.grade_label ?? "—",
+  caption: analysis.value?.ai_visibility_summary ?? "",
   monthlyLoss: analysis.value?.estimated_monthly_loss ?? null,
-}))
+}));
 
 const metrics = computed(() => [
   {
-    label: 'Est. Monthly Loss',
-    value: analysis.value?.estimated_monthly_loss ?? '—',
-    note: 'Estimated revenue lost from missed online leads',
-    caption: analysis.value?.ai_visibility_summary ?? '',
+    label: "Est. Monthly Loss",
+    value: analysis.value?.estimated_monthly_loss ?? "—",
+    note: "Estimated revenue lost from missed online leads",
+    caption: analysis.value?.ai_visibility_summary ?? "",
   },
-])
+]);
 
 function tone(s, max) {
-  const r = s / max
-  if (r >= 0.75) return 'green'
-  if (r >= 0.5) return 'amber'
-  return 'red'
+  const r = s / max;
+  if (r >= 0.75) return "green";
+  if (r >= 0.5) return "amber";
+  return "red";
 }
 
 const subScores = computed(() => {
-  if (!analysis.value) return []
-  const c = analysis.value.categories
+  if (!analysis.value) return [];
+  const c = analysis.value.categories;
   return [
-    { label: 'Conversion', detail: c.conversion.label, score: c.conversion.score, total: c.conversion.max, tone: tone(c.conversion.score, c.conversion.max) },
-    { label: 'Technical', detail: c.technical.label, score: c.technical.score, total: c.technical.max, tone: tone(c.technical.score, c.technical.max) },
-    { label: 'Content', detail: c.content.label, score: c.content.score, total: c.content.max, tone: tone(c.content.score, c.content.max) },
-    { label: 'Trust', detail: c.trust.label, score: c.trust.score, total: c.trust.max, tone: tone(c.trust.score, c.trust.max) },
-    { label: 'Local', detail: c.local.label, score: c.local.score, total: c.local.max, tone: tone(c.local.score, c.local.max) },
-  ]
-})
+    {
+      label: "Conversion",
+      detail: c.conversion.label,
+      score: c.conversion.score,
+      total: c.conversion.max,
+      tone: tone(c.conversion.score, c.conversion.max),
+    },
+    {
+      label: "Technical",
+      detail: c.technical.label,
+      score: c.technical.score,
+      total: c.technical.max,
+      tone: tone(c.technical.score, c.technical.max),
+    },
+    {
+      label: "Content",
+      detail: c.content.label,
+      score: c.content.score,
+      total: c.content.max,
+      tone: tone(c.content.score, c.content.max),
+    },
+    {
+      label: "Trust",
+      detail: c.trust.label,
+      score: c.trust.score,
+      total: c.trust.max,
+      tone: tone(c.trust.score, c.trust.max),
+    },
+    {
+      label: "Local",
+      detail: c.local.label,
+      score: c.local.score,
+      total: c.local.max,
+      tone: tone(c.local.score, c.local.max),
+    },
+  ];
+});
 
 function toGroups(cat) {
   return [
@@ -78,44 +108,70 @@ function toGroups(cat) {
         passed: item.pass,
       })),
     },
-  ]
+  ];
 }
 
 const sections = computed(() => {
-  if (!analysis.value) return []
-  const c = analysis.value.categories
+  if (!analysis.value) return [];
+  const c = analysis.value.categories;
   return [
-    { key: 'conversion', title: 'Conversion Signals', description: 'Does your site turn visitors into calls and bookings?', cat: c.conversion },
-    { key: 'technical', title: 'Technical Health', description: 'How fast and accessible is your site on mobile?', cat: c.technical },
-    { key: 'content', title: 'Content Depth', description: 'Does your site give AI enough to read, cite, and recommend?', cat: c.content },
-    { key: 'trust', title: 'Trust Signals', description: 'Can customers and AI systems verify your business is real?', cat: c.trust },
-    { key: 'local', title: 'Local Presence', description: 'Do you show up when someone searches near you?', cat: c.local },
-  ]
-})
+    {
+      key: "conversion",
+      title: "Conversion Signals",
+      description: "Does your site turn visitors into calls and bookings?",
+      cat: c.conversion,
+    },
+    {
+      key: "technical",
+      title: "Technical Health",
+      description: "How fast and accessible is your site on mobile?",
+      cat: c.technical,
+    },
+    {
+      key: "content",
+      title: "Content Depth",
+      description:
+        "Does your site give AI enough to read, cite, and recommend?",
+      cat: c.content,
+    },
+    {
+      key: "trust",
+      title: "Trust Signals",
+      description: "Can customers and AI systems verify your business is real?",
+      cat: c.trust,
+    },
+    {
+      key: "local",
+      title: "Local Presence",
+      description: "Do you show up when someone searches near you?",
+      cat: c.local,
+    },
+  ];
+});
 
 const failCount = computed(() => {
-  if (!analysis.value) return 0
+  if (!analysis.value) return 0;
   return Object.values(analysis.value.categories)
     .flatMap((c) => c.items)
-    .filter((i) => !i.pass).length
-})
+    .filter((i) => !i.pass).length;
+});
 
 const reportDate = computed(() =>
-  new Date().toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
-)
+  new Date().toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }),
+);
 
 function handleStickyClick() {
-  gtag('event', 'cta_click', {
-    button_location: 'sticky_bar',
+  gtag("event", "cta_click", {
+    button_location: "sticky_bar",
     report_price: pricing.fullReport,
     report_id: route.params.id,
     total_score: score.value.value,
-  })
-  router.push({ path: '/fullReport', query: { r: route.params.id } })
+  });
+  router.push({ path: "/fullReport", query: { r: route.params.id } });
 }
 </script>
 
@@ -165,11 +221,7 @@ function handleStickyClick() {
 
     <div class="sticky-bar">
       <span class="sticky-label">Get Your Full Fix Plan</span>
-      <button
-        type="button"
-        class="sticky-btn"
-        @click="handleStickyClick"
-      >
+      <button type="button" class="sticky-btn" @click="handleStickyClick">
         {{ pricing.fullReport }} →
       </button>
     </div>

@@ -1,4 +1,6 @@
 <script setup>
+import { RouterLink } from 'vue-router'
+
 defineProps({
   date: { type: String, required: true }
 })
@@ -6,10 +8,10 @@ defineProps({
 
 <template>
   <header class="page-header">
-    <NuxtLink class="wordmark" to="/" aria-label="HVAC Grader home">
+    <RouterLink class="wordmark" to="/" aria-label="HVAC Grader home">
       <span class="mark" aria-hidden="true"></span>
       <span class="name">HVAC Grader</span>
-    </NuxtLink>
+    </RouterLink>
     <div class="stamp">
       <span>Report</span>
       <span class="dot">•</span>

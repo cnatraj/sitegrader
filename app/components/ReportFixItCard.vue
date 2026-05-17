@@ -1,12 +1,16 @@
 <script setup>
+import { useRoute, useRouter } from 'vue-router'
+import { useAppConfig } from '../composables/useAppConfig.js'
+
 defineProps({
   fixCount: { type: Number, default: 0 },
   monthlyLoss: { type: String, default: "" },
 });
 const { pricing } = useAppConfig();
-const route = useRoute()
+const route = useRoute();
+const router = useRouter();
 function goToFullReport() {
-  navigateTo({ path: '/fullReport', query: { r: route.params.id } })
+  router.push({ path: "/fullReport", query: { r: route.params.id } });
 }
 </script>
 
