@@ -3,6 +3,7 @@ defineProps({
   businessName: { type: String, default: "" },
   date: { type: String, default: "" },
 });
+const { pricing } = useAppConfig()
 </script>
 
 <template>
@@ -20,7 +21,7 @@ defineProps({
       <div class="h-divider" aria-hidden="true"></div>
       <div class="price-row">
         <span class="price-label">Total · One-Time</span>
-        <span class="price">$19.99</span>
+        <span class="price">{{ pricing.fullReport }}</span>
       </div>
     </div>
 

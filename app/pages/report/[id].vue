@@ -2,6 +2,8 @@
 import { computed } from "vue";
 import { api } from "../../../convex/_generated/api";
 
+const { pricing } = useAppConfig()
+
 const route = useRoute();
 const { data: report, pending } = useConvexQuery(api.reports.byId, () => ({
   id: route.params.id,
@@ -200,7 +202,7 @@ const reportDate = computed(() =>
         class="sticky-btn"
         @click="navigateTo('/fullReport')"
       >
-        $19.99 →
+        {{ pricing.fullReport }} →
       </button>
     </div>
   </div>

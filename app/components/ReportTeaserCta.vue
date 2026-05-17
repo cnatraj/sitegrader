@@ -2,6 +2,7 @@
 defineProps({
   fixCount: { type: Number, default: 0 }
 })
+const { pricing } = useAppConfig()
 </script>
 
 <template>
@@ -11,7 +12,7 @@ defineProps({
       <span class="teaser-sub">{{ fixCount }} issues · personalized action plan · takes 35 sec</span>
     </div>
     <button type="button" class="teaser-btn" @click="navigateTo('/fullReport')">
-      Get Full Report — $19.99
+      Get Full Report — {{ pricing.fullReport }}
       <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
       </svg>

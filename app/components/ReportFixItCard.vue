@@ -3,6 +3,7 @@ defineProps({
   fixCount: { type: Number, default: 0 },
   monthlyLoss: { type: String, default: '' }
 })
+const { pricing } = useAppConfig()
 </script>
 
 <template>
@@ -16,7 +17,7 @@ defineProps({
       <span class="accent">{{ monthlyLoss }}/mo</span>.
     </p>
     <div class="price-row">
-      <span class="price">$19.99</span>
+      <span class="price">{{ pricing.fullReport }}</span>
       <span class="price-note">one-time</span>
     </div>
     <button type="button" class="btn" @click="navigateTo('/fullReport')">
