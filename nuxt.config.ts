@@ -7,10 +7,7 @@ loadDotenv({ path: '.env.local' })
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'nuxt-gtag'],
-  nitro: {
-    preset: 'netlify',
-  },
+  modules: ['@nuxtjs/tailwindcss', 'nuxt-gtag', '@netlify/nuxt'],
   gtag: {
     id: 'G-E7H3CRVBN6',
   },
