@@ -23,6 +23,7 @@ async function submit() {
     email: email.value,
     reportId: route.query.r || undefined,
   })
+  window.fbq?.('trackCustom', 'email_captured')
   submitted.value = true
 }
 </script>

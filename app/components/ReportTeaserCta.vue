@@ -15,7 +15,7 @@ const router = useRouter()
       <span class="teaser-label">Want the full fix list?</span>
       <span class="teaser-sub">{{ fixCount }} issues · personalized action plan · takes 35 sec</span>
     </div>
-    <button type="button" class="teaser-btn" @click="router.push('/fullReport')">
+    <button type="button" class="teaser-btn" @click="() => { window.fbq?.('trackCustom', 'upgrade_cta_clicked'); router.push('/fullReport') }">
       Get Full Report — {{ pricing.fullReport }}
       <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />

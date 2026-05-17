@@ -10,6 +10,7 @@ const { pricing } = useAppConfig();
 const route = useRoute();
 const router = useRouter();
 function goToFullReport() {
+  window.fbq?.('trackCustom', 'upgrade_cta_clicked')
   router.push({ path: "/fullReport", query: { r: route.params.id } });
 }
 </script>

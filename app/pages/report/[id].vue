@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { api } from "../../../convex/_generated/api";
 import { useConvexQuery } from "../../composables/useConvex.js";
@@ -25,6 +25,10 @@ const { data: report, pending } = useConvexQuery(api.reports.byId, () => ({
 }));
 
 const analysis = computed(() => report.value?.analysis ?? null);
+
+watch(analysis, (val) => {
+  if (val) window.fbq?.('trackCustom', 'report_generated')
+}, { once: true })
 
 const business = computed(() => ({
   name: analysis.value?.business_name ?? report.value?.url ?? "—",
@@ -171,6 +175,7 @@ function handleStickyClick() {
     report_id: route.params.id,
     total_score: score.value.value,
   });
+  window.fbq?.('trackCustom', 'upgrade_cta_clicked')
   router.push({ path: "/fullReport", query: { r: route.params.id } });
 }
 </script>
