@@ -1,40 +1,40 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { api } from '../../convex/_generated/api'
-import { useConvexMutation } from '../composables/useConvex.js'
-import { useGtag } from '../composables/useGtag.js'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { api } from "../../convex/_generated/api";
+import { useConvexMutation } from "../composables/useConvex.js";
+import { useGtag } from "../composables/useGtag.js";
 
-const { gtag } = useGtag()
-gtag('event', 'page_view', { page_title: 'Home' })
+const { gtag } = useGtag();
+gtag("event", "page_view", { page_title: "Home" });
 
-const router = useRouter()
-const query = ref('')
-const inputEl = ref(null)
-const submitting = ref(false)
+const router = useRouter();
+const query = ref("");
+const inputEl = ref(null);
+const submitting = ref(false);
 
-const createReport = useConvexMutation(api.reports.create)
+const createReport = useConvexMutation(api.reports.create);
 
 const suggestions = [
-  { label: 'Is my site ranking on Google?', icon: 'search' },
-  { label: "What's broken on my site?", icon: 'warning' },
-  { label: 'Am I losing leads online?', icon: 'phone' }
-]
+  { label: "Does ChatGPT know I exist?", icon: "search" },
+  { label: "Why isn't AI recommending me?", icon: "warning" },
+  { label: "Am I losing leads to my competitor?", icon: "phone" },
+];
 
 function applySuggestion(label) {
-  query.value = label
-  inputEl.value?.focus()
+  query.value = label;
+  inputEl.value?.focus();
 }
 
 async function onSubmit() {
-  if (!query.value || submitting.value) return
-  submitting.value = true
+  if (!query.value || submitting.value) return;
+  submitting.value = true;
   try {
-    const reportId = await createReport({ url: query.value })
-    await router.push(`/processing/${reportId}`)
+    const reportId = await createReport({ url: query.value });
+    await router.push(`/processing/${reportId}`);
   } catch (err) {
-    submitting.value = false
-    console.error('[index] failed to create report', err)
+    submitting.value = false;
+    console.error("[index] failed to create report", err);
   }
 }
 </script>
@@ -47,8 +47,13 @@ async function onSubmit() {
     </RouterLink>
 
     <div class="panel" data-screen-label="01 Landing">
-      <h1 class="headline">Enter your website URL to see your online health score</h1>
-      <p class="sub">Find out if your website is winning or losing customers — free, in seconds.</p>
+      <h1 class="headline">
+        <div>Is ChatGPT recommending your HVAC company?</div>
+      </h1>
+      <h2 class="sub mt-2">
+        Find out what's costing you calls. Enter your URL below for your free AI
+        Readiness Score.
+      </h2>
 
       <form class="search" role="search" @submit.prevent="onSubmit">
         <input
@@ -63,7 +68,13 @@ async function onSubmit() {
           aria-label="Your HVAC website URL"
         />
         <button class="submit" type="submit" aria-label="Run the grader">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+          >
             <path
               d="M10 4 L10 16 M10 4 L5 9 M10 4 L15 9"
               stroke="currentColor"
@@ -81,16 +92,40 @@ async function onSubmit() {
           :key="s.label"
           type="button"
           class="chip"
-          @click="applySuggestion(s.label)"
         >
           <span class="ic" aria-hidden="true">
             <svg v-if="s.icon === 'search'" viewBox="0 0 16 16" fill="none">
-              <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.4" />
-              <path d="M10.4 10.4 L13.5 13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+              <circle
+                cx="7"
+                cy="7"
+                r="4.5"
+                stroke="currentColor"
+                stroke-width="1.4"
+              />
+              <path
+                d="M10.4 10.4 L13.5 13.5"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+              />
             </svg>
-            <svg v-else-if="s.icon === 'warning'" viewBox="0 0 16 16" fill="none">
-              <path d="M8 2 L14.5 13.5 L1.5 13.5 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" />
-              <path d="M8 6.5 V9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+            <svg
+              v-else-if="s.icon === 'warning'"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <path
+                d="M8 2 L14.5 13.5 L1.5 13.5 Z"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M8 6.5 V9.5"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+              />
               <circle cx="8" cy="11.5" r="0.7" fill="currentColor" />
             </svg>
             <svg v-else-if="s.icon === 'phone'" viewBox="0 0 16 16" fill="none">
@@ -131,7 +166,7 @@ async function onSubmit() {
 }
 .mark::before,
 .mark::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: 50%;

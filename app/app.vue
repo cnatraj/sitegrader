@@ -5,7 +5,6 @@
 </template>
 
 <style>
-
 .stage {
   min-height: 100vh;
   min-height: 100dvh;
@@ -28,13 +27,13 @@
   font-weight: 500;
   margin: 0 0 18px;
   text-wrap: balance;
-  color: #1A1714;
+  color: #1a1714;
 }
 
 .sub {
-  font-size: clamp(15px, 1.25vw, 17px);
+  font-size: clamp(17px, 1.25vw, 17px);
   line-height: 1.5;
-  color: #5C564E;
+  color: #5c564e;
   margin: 0 auto 36px;
   max-width: 520px;
   text-wrap: pretty;
@@ -44,14 +43,18 @@
   position: relative;
   display: flex;
   align-items: center;
-  background: #F2EFE9;
+  background: #f2efe9;
   border-radius: 999px;
   padding: 6px 6px 6px 26px;
-  transition: background 0.18s ease, box-shadow 0.18s ease;
+  transition:
+    background 0.18s ease,
+    box-shadow 0.18s ease;
 }
 .search:focus-within {
-  background: #FFFFFF;
-  box-shadow: 0 0 0 1px #E6E1D8, 0 0 0 5px rgba(194, 65, 12, 0.18);
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px #e6e1d8,
+    0 0 0 5px rgba(194, 65, 12, 0.18);
 }
 .search input {
   flex: 1;
@@ -60,12 +63,12 @@
   outline: none;
   font: inherit;
   font-size: 17px;
-  color: #1A1714;
+  color: #1a1714;
   padding: 22px 12px 22px 0;
   min-width: 0;
 }
 .search input::placeholder {
-  color: #8E867C;
+  color: #8e867c;
 }
 
 .submit {
@@ -74,15 +77,17 @@
   height: 48px;
   border-radius: 50%;
   border: 0;
-  background: #C2410C;
+  background: #c2410c;
   color: #fff;
   display: inline-grid;
   place-items: center;
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
 }
 .submit:hover {
-  background: #9A3309;
+  background: #9a3309;
 }
 .submit:active {
   transform: scale(0.96);
@@ -100,9 +105,9 @@
 }
 .chip {
   appearance: none;
-  border: 1px solid #E6E1D8;
+  border: 1px solid #e6e1d8;
   background: transparent;
-  color: #1A1714;
+  color: #1a1714;
   font: inherit;
   font-size: 14px;
   padding: 9px 16px 9px 14px;
@@ -111,18 +116,21 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 .chip:hover {
-  background: #F2EFE9;
-  border-color: #DAD3C5;
+  background: #f2efe9;
+  border-color: #dad3c5;
 }
 .chip .ic {
   width: 14px;
   height: 14px;
   display: inline-block;
   flex: 0 0 14px;
-  color: #5C564E;
+  color: #5c564e;
 }
 .chip .ic svg {
   display: block;
@@ -132,10 +140,10 @@
 
 .micro {
   margin-top: 28px;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.04em;
-  color: #8E867C;
+  color: #8e867c;
   text-transform: uppercase;
 }
 .micro span {
@@ -143,7 +151,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #4A8A5E;
+  background: #4a8a5e;
   margin-right: 8px;
   transform: translateY(-2px);
   box-shadow: 0 0 0 3px rgba(74, 138, 94, 0.12);
@@ -153,7 +161,7 @@
   .stage {
     padding: 110px 18px 40px;
   }
-.headline {
+  .headline {
     font-size: 32px;
   }
   .search input {
