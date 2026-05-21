@@ -66,7 +66,7 @@ let timer = null;
 const allDone = computed(() => currentIndex.value >= checks.length);
 
 watch(allDone, (val) => {
-  // if (val) router.push(`/report/${reportId.value}`)
+  if (val) router.push(`/report/${reportId.value}`);
 });
 
 onMounted(() => {
