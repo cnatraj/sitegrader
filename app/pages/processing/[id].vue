@@ -34,21 +34,14 @@ const STATUS_MAP = {
 
 watch(report, (val) => {
   if (!val) return
-  console.log('[processing] report update:', { status: val.status, error: val.error, hasAnalysis: !!val.analysis, hasScrape: !!val.scrapeData, hasPageSpeed: !!val.pageSpeedData })
-  if (val.status === 'done') {
-    router.push(`/report/${reportId.value}`)
-    return
-  }
-  const floor = STATUS_MAP[val.status]?.floor ?? 0
-  if (currentIndex.value < floor) {
-    currentIndex.value = floor
-  }
+  console.log('[processing] report update:', { status: val.status, error: val.error, hasAnalysis: !!val.analysis, hasScrape: !!val.scrapeData })
+  // timer is the only thing that advances currentIndex — no floor snapping
 })
 
 const checks = [
   { label: 'Finding your website', emoji: '🔍' },
   { label: 'Reading your website content', emoji: '📄' },
-  { label: 'Testing your page speed on mobile', emoji: '⚡' },
+  { label: 'Scanning your content and site structure', emoji: '⚡' },
   { label: 'Checking for phone numbers and contact options', emoji: '📞' },
   { label: 'Looking for reviews and trust signals', emoji: '🛡️' },
   { label: 'Checking your local presence and service areas', emoji: '📍' },
@@ -57,11 +50,15 @@ const checks = [
   { label: 'Calculating your score', emoji: '📊' }
 ]
 
-const stepMs = 1400
+const stepMs = 2000
 const currentIndex = ref(0)
 let timer = null
 
 const allDone = computed(() => currentIndex.value >= checks.length)
+
+watch(allDone, (val) => {
+  if (val) router.push(`/report/${reportId.value}`)
+})
 
 function stepStatus(i) {
   if (i < currentIndex.value) return 'done'
@@ -72,7 +69,7 @@ function stepStatus(i) {
 onMounted(() => {
   timer = setInterval(() => {
     const status = report.value?.status ?? 'queued'
-    const ceiling = STATUS_MAP[status]?.ceiling ?? 0
+    const ceiling = status === 'done' ? checks.length : (STATUS_MAP[status]?.ceiling ?? 0)
     if (currentIndex.value < ceiling) {
       currentIndex.value += 1
     }

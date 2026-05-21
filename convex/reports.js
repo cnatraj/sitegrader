@@ -20,7 +20,7 @@ export const create = mutation({
     });
     // Kick off pipeline steps in parallel — client doesn't wait.
     await ctx.scheduler.runAfter(0, internal.reports.scrapeUrl, { id });
-    await ctx.scheduler.runAfter(0, internal.reports.runPageSpeed, { id });
+    // await ctx.scheduler.runAfter(0, internal.reports.runPageSpeed, { id });
     return id;
   },
 });
@@ -53,10 +53,11 @@ export const setScrape = internalMutation({
   args: { id: v.id("reports"), scrapeData: v.any() },
   handler: async (ctx, { id, scrapeData }) => {
     await ctx.db.patch(id, { scrapeData, status: "scraped" });
-    const report = await ctx.db.get(id);
-    if (report?.pageSpeedData) {
-      await ctx.scheduler.runAfter(0, internal.reports.runAnalysis, { id });
-    }
+    // const report = await ctx.db.get(id);
+    // if (report?.pageSpeedData) {
+    //   await ctx.scheduler.runAfter(0, internal.reports.runAnalysis, { id });
+    // }
+    await ctx.scheduler.runAfter(0, internal.reports.runAnalysis, { id });
   },
 });
 
@@ -67,131 +68,150 @@ export const fail = internalMutation({
   },
 });
 
-const pageSpeedDataValidator = v.object({
-  mobile: v.object({ score: v.number(), lcp: v.number(), cls: v.number(), screenshotId: v.id('_storage') })
-})
+// const pageSpeedDataValidator = v.object({
+//   mobile: v.object({ score: v.number(), lcp: v.number(), cls: v.number(), screenshotId: v.id('_storage') })
+// })
 
-export const setPageSpeed = internalMutation({
-  args: { id: v.id('reports'), pageSpeedData: pageSpeedDataValidator },
-  handler: async (ctx, { id, pageSpeedData }) => {
-    await ctx.db.patch(id, { pageSpeedData })
-    const report = await ctx.db.get(id);
-    if (report?.scrapeData) {
-      await ctx.scheduler.runAfter(0, internal.reports.runAnalysis, { id });
-    }
-  }
-})
+// export const setPageSpeed = internalMutation({
+//   args: { id: v.id('reports'), pageSpeedData: pageSpeedDataValidator },
+//   handler: async (ctx, { id, pageSpeedData }) => {
+//     await ctx.db.patch(id, { pageSpeedData })
+//     const report = await ctx.db.get(id);
+//     if (report?.scrapeData) {
+//       await ctx.scheduler.runAfter(0, internal.reports.runAnalysis, { id });
+//     }
+//   }
+// })
 
 export const setAnalysis = internalMutation({
-  args: { id: v.id('reports'), analysis: v.any() },
+  args: { id: v.id("reports"), analysis: v.any() },
   handler: async (ctx, { id, analysis }) => {
-    await ctx.db.patch(id, { analysis, status: 'done', completedAt: Date.now() })
-  }
-})
+    await ctx.db.patch(id, {
+      analysis,
+      status: "done",
+      completedAt: Date.now(),
+    });
+  },
+});
 
 export const runAnalysis = internalAction({
-  args: { id: v.id('reports') },
+  args: { id: v.id("reports") },
   handler: async (ctx, { id }) => {
     try {
-      const report = await ctx.runQuery(api.reports.byId, { id })
-      if (!report) throw new Error('report missing')
+      const report = await ctx.runQuery(api.reports.byId, { id });
+      if (!report) throw new Error("report missing");
 
-      const apiKey = process.env.ANTHROPIC_API_KEY
-      if (!apiKey) throw new Error('ANTHROPIC_API_KEY not set on Convex deployment')
+      const apiKey = process.env.ANTHROPIC_API_KEY;
+      if (!apiKey)
+        throw new Error("ANTHROPIC_API_KEY not set on Convex deployment");
 
-      await ctx.runMutation(internal.reports.setStatus, { id, status: 'analyzing' })
+      await ctx.runMutation(internal.reports.setStatus, {
+        id,
+        status: "analyzing",
+      });
 
-      const { mobile } = report.pageSpeedData
+      // const { mobile } = report.pageSpeedData
       const userMessage = `URL: ${report.url}
 
-## Mobile Performance (PageSpeed)
-Score: ${mobile.score} / 100
-LCP: ${Math.round(mobile.lcp)} ms
-CLS: ${mobile.cls.toFixed(3)}
-
 ## Website HTML
-${report.scrapeData.html}`
+${report.scrapeData.html}`;
+      // ## Mobile Performance (PageSpeed)
+      // Score: ${mobile.score} / 100
+      // LCP: ${Math.round(mobile.lcp)} ms
+      // CLS: ${mobile.cls.toFixed(3)}
 
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
         headers: {
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json'
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01",
+          "content-type": "application/json",
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
+          model: "claude-sonnet-4-6",
           max_tokens: 4096,
           system: analysisPrompt,
-          messages: [{ role: 'user', content: userMessage }]
-        })
-      })
+          messages: [{ role: "user", content: userMessage }],
+        }),
+      });
 
-      if (!res.ok) throw new Error(`Anthropic returned ${res.status}`)
+      if (!res.ok) throw new Error(`Anthropic returned ${res.status}`);
 
-      const body = await res.json()
-      const text = body.content?.[0]?.text ?? ''
-      console.log('[runAnalysis] raw claude response (first 500 chars):', text.slice(0, 500))
-      const jsonMatch = text.match(/\{[\s\S]*\}/)
-      if (!jsonMatch) throw new Error('No JSON found in Claude response')
-      console.log('[runAnalysis] extracted json (first 200 chars):', jsonMatch[0].slice(0, 200))
-      const analysis = JSON.parse(jsonMatch[0])
-      console.log('[runAnalysis] parsed ok, overall_score:', analysis.overall_score)
+      const body = await res.json();
+      const text = body.content?.[0]?.text ?? "";
+      console.log(
+        "[runAnalysis] raw claude response (first 500 chars):",
+        text.slice(0, 500),
+      );
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error("No JSON found in Claude response");
+      console.log(
+        "[runAnalysis] extracted json (first 200 chars):",
+        jsonMatch[0].slice(0, 200),
+      );
+      const analysis = JSON.parse(jsonMatch[0]);
+      console.log(
+        "[runAnalysis] parsed ok, overall_score:",
+        analysis.overall_score,
+      );
 
-      await ctx.runMutation(internal.reports.setAnalysis, { id, analysis })
+      await ctx.runMutation(internal.reports.setAnalysis, { id, analysis });
     } catch (e) {
-      await ctx.runMutation(internal.reports.fail, { id, error: String(e?.message ?? e) })
-    }
-  }
-})
-
-function base64ToBlob(dataUrl) {
-  const [header, data] = dataUrl.split(',')
-  const mime = header.match(/:(.*?);/)[1]
-  const binary = atob(data)
-  const bytes = new Uint8Array(binary.length)
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
-  return new Blob([bytes], { type: mime })
-}
-
-async function fetchPageSpeed(url, strategy, apiKey) {
-  const endpoint = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}&key=${apiKey}`
-  const res = await fetch(endpoint)
-  if (!res.ok) throw new Error(`PageSpeed ${strategy} returned ${res.status}`)
-  return res.json()
-}
-
-export const runPageSpeed = internalAction({
-  args: { id: v.id('reports') },
-  handler: async (ctx, { id }) => {
-    try {
-      const report = await ctx.runQuery(api.reports.byId, { id })
-      if (!report) throw new Error('report missing')
-
-      const apiKey = process.env.PAGESPEED_API_KEY
-      if (!apiKey) throw new Error('PAGESPEED_API_KEY not set on Convex deployment')
-
-      const mobileData = await fetchPageSpeed(report.url, 'mobile', apiKey)
-
-      const audits = mobileData.lighthouseResult.audits
-      const score = Math.round((mobileData.lighthouseResult.categories.performance.score ?? 0) * 100)
-      const lcp = audits['largest-contentful-paint']?.numericValue ?? 0
-      const cls = audits['cumulative-layout-shift']?.numericValue ?? 0
-      const screenshotDataUrl = audits['final-screenshot']?.details?.data ?? null
-
-      const screenshotId = await ctx.storage.store(base64ToBlob(screenshotDataUrl))
-
-      await ctx.runMutation(internal.reports.setPageSpeed, {
+      await ctx.runMutation(internal.reports.fail, {
         id,
-        pageSpeedData: {
-          mobile: { score, lcp, cls, screenshotId }
-        }
-      })
-    } catch (e) {
-      console.error('[runPageSpeed]', e?.message ?? e)
+        error: String(e?.message ?? e),
+      });
     }
-  }
-})
+  },
+});
+
+// function base64ToBlob(dataUrl) {
+//   const [header, data] = dataUrl.split(',')
+//   const mime = header.match(/:(.*?);/)[1]
+//   const binary = atob(data)
+//   const bytes = new Uint8Array(binary.length)
+//   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+//   return new Blob([bytes], { type: mime })
+// }
+
+// async function fetchPageSpeed(url, strategy, apiKey) {
+//   const endpoint = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}&key=${apiKey}`
+//   const res = await fetch(endpoint)
+//   if (!res.ok) throw new Error(`PageSpeed ${strategy} returned ${res.status}`)
+//   return res.json()
+// }
+
+// export const runPageSpeed = internalAction({
+//   args: { id: v.id('reports') },
+//   handler: async (ctx, { id }) => {
+//     try {
+//       const report = await ctx.runQuery(api.reports.byId, { id })
+//       if (!report) throw new Error('report missing')
+
+//       const apiKey = process.env.PAGESPEED_API_KEY
+//       if (!apiKey) throw new Error('PAGESPEED_API_KEY not set on Convex deployment')
+
+//       const mobileData = await fetchPageSpeed(report.url, 'mobile', apiKey)
+
+//       const audits = mobileData.lighthouseResult.audits
+//       const score = Math.round((mobileData.lighthouseResult.categories.performance.score ?? 0) * 100)
+//       const lcp = audits['largest-contentful-paint']?.numericValue ?? 0
+//       const cls = audits['cumulative-layout-shift']?.numericValue ?? 0
+//       const screenshotDataUrl = audits['final-screenshot']?.details?.data ?? null
+
+//       const screenshotId = await ctx.storage.store(base64ToBlob(screenshotDataUrl))
+
+//       await ctx.runMutation(internal.reports.setPageSpeed, {
+//         id,
+//         pageSpeedData: {
+//           mobile: { score, lcp, cls, screenshotId }
+//         }
+//       })
+//     } catch (e) {
+//       console.error('[runPageSpeed]', e?.message ?? e)
+//     }
+//   }
+// })
 
 // Internal action: hits Firecrawl and stores the result on the report doc.
 export const scrapeUrl = internalAction({

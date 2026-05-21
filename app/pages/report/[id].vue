@@ -70,13 +70,13 @@ const subScores = computed(() => {
       total: c.conversion.max,
       tone: tone(c.conversion.score, c.conversion.max),
     },
-    {
-      label: "Technical",
-      detail: c.technical.label,
-      score: c.technical.score,
-      total: c.technical.max,
-      tone: tone(c.technical.score, c.technical.max),
-    },
+    // {
+    //   label: "Technical",
+    //   detail: c.technical.label,
+    //   score: c.technical.score,
+    //   total: c.technical.max,
+    //   tone: tone(c.technical.score, c.technical.max),
+    // },
     {
       label: "Content",
       detail: c.content.label,
@@ -125,12 +125,12 @@ const sections = computed(() => {
       description: "Does your site turn visitors into calls and bookings?",
       cat: c.conversion,
     },
-    {
-      key: "technical",
-      title: "Technical Health",
-      description: "How fast and accessible is your site on mobile?",
-      cat: c.technical,
-    },
+    // {
+    //   key: "technical",
+    //   title: "Technical Health",
+    //   description: "How fast and accessible is your site on mobile?",
+    //   cat: c.technical,
+    // },
     {
       key: "content",
       title: "Content Depth",
